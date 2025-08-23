@@ -1,0 +1,45 @@
+# ----------------------------------------
+# React Frontend (react-frontend)
+/react-frontend/node_modules
+/react-frontend/dist
+/react-frontend/dist-ssr
+/react-frontend/*.local
+/react-frontend/npm-debug.log*
+/react-frontend/yarn-debug.log*
+/react-frontend/yarn-error.log*
+/react-frontend/pnpm-debug.log*
+/react-frontend/lerna-debug.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ----------------------------------------
+# Rails Backend (rails-api-backend)
+/rails-api-backend/.bundle
+/rails-api-backend/log/*
+!/rails-api-backend/log/.keep
+/rails-api-backend/tmp/*
+!/rails-api-backend/tmp/.keep
+/rails-api-backend/tmp/pids/*
+!/rails-api-backend/tmp/pids/
+!/rails-api-backend/tmp/pids/.keep
+/rails-api-backend/storage/*
+!/rails-api-backend/storage/.keep
+/rails-api-backend/tmp/storage/*
+!/rails-api-backend/tmp/storage/
+!/rails-api-backend/tmp/storage/.keep
+/rails-api-backend/.env*
+/rails-api-backend/config/master.key
+
+# ----------------------------------------
+# General (shared)
+/.env
+.DS_Store
