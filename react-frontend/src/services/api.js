@@ -49,4 +49,29 @@ export const authAPI = {
   }),
 }
 
+export const functionAPI = {
+  // Fetch all functions
+  list: () => apiRequest('/functions'),
+
+  // Fetch a single function by ID
+  get: (id) => apiRequest(`/functions/${id}`),
+
+  // Create a new function
+  create: (data) => apiRequest('/functions', {
+    method: 'POST',
+    body: JSON.stringify({ function: data }),
+  }),
+
+  // Update an existing function
+  update: (id, data) => apiRequest(`/functions/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({ function: data }),
+  }),
+
+  // Delete a function
+  delete: (id) => apiRequest(`/functions/${id}`, {
+    method: 'DELETE',
+  }),
+}
+
 export const healthCheck = () => apiRequest('/health')

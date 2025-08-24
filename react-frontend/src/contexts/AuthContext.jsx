@@ -17,12 +17,10 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    debugger
     checkAuthStatus()
   }, [])
 
   const checkAuthStatus = async () => {
-    debugger
     const token = localStorage.getItem('token')
     if (token) {
       try {

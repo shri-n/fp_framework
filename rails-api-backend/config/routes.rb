@@ -10,4 +10,6 @@ Rails.application.routes.draw do
   post '/users',      to: 'users#create'
   post '/auth/login', to: 'auth#login'
   get  '/me',         to: 'users#me'
+
+  resources :functions, only: [:index, :show, :create, :update, :destroy]
 end
