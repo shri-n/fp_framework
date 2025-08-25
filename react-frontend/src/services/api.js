@@ -50,34 +50,33 @@ export const authAPI = {
 }
 
 export const ServiceAPI = {
-  // Fetch all functions
-  index: () => apiRequest('/services'),
+  index: () => apiRequest("/services"),
 
-  // Fetch a single function by ID
   show: (id) => apiRequest(`/services/${id}`),
 
-  // Create a new function
-  create: (data) => apiRequest('/services', {
-    method: 'POST',
-    body: JSON.stringify({ services: data }),
-  }),
+  create: (data) =>
+    apiRequest("/services", {
+      method: "POST",
+      body: JSON.stringify({ service: data }),
+    }),
 
-  // Update an existing function
-  update: (id, data) => apiRequest(`/services/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify({ function: data }),
-  }),
+  update: (id, data) =>
+    apiRequest(`/services/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({ service: data }),
+    }),
 
-  // Delete a function
-  delete: (id) => apiRequest(`/services/${id}`, {
-    method: 'DELETE',
-  }),
+  delete: (id) =>
+    apiRequest(`/services/${id}`, {
+      method: "DELETE",
+    }),
 
-  run: (params) => apiRequest(`/services/${id}/run`, {
-    method: 'POST',
-    body: JSON.stringify({ params: params }),
-  }),
-}
+  run: (id, params) =>
+    apiRequest(`/services/${id}/run`, {
+      method: "POST",
+      body: JSON.stringify({ params }),
+    }),
+};
 
 
 export const healthCheck = () => apiRequest('/health')

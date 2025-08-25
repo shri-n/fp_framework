@@ -10,31 +10,33 @@ import {
 } from "@mui/material";
 import Navbar from "../components/Navbar";
 import Editor from "@monaco-editor/react";
-import { ServiceAPI } from '../services/api'
-
+import { ServiceAPI } from "../services/api";
 
 export default function ServiceForm({ mode, setMode }) {
   const { id } = useParams(); // "new" or an ID
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({ name: "", parameters: "{}", code: "" });
+  const [runResult, setRunResult] = useState(""); // for output display
+
   const [loading, setLoading] = useState(false);
 
   // Load service data if editing
   useEffect(() => {
     if (id !== "new") {
       setLoading(true);
-      fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
-        .then((res) => res.json())
+      ServiceAPI.show(id)
         .then((data) => {
           setFormData({
             name: data.name,
-            parameters: JSON.stringify({ example: "param" }, null, 2), // fake params
-            code: "# Ruby code goes here\nputs 'Hello from service #{id}'",
+            parameters: JSON.stringify(data.parameters || {}, null, 2),
+            code: data.code || "",
           });
-          setLoading(false);
         })
-        .catch(() => setLoading(false));
+        .catch((err) => {
+          console.error("Error fetching service:", err);
+        })
+        .finally(() => setLoading(false));
     }
   }, [id]);
 
@@ -46,32 +48,36 @@ export default function ServiceForm({ mode, setMode }) {
     setFormData((prev) => ({ ...prev, code: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (id === "new") {
-      console.log("Creating service:", formData);
-    } else {
-      console.log("Updating service:", { id, ...formData });
+    try {
+      if (id === "new") {
+        await ServiceAPI.create(formData);
+      } else {
+        await ServiceAPI.update(id, formData);
+      }
+      navigate("/services");
+    } catch (err) {
+      console.error("Error saving service:", err);
+      alert("Failed to save service");
     }
-
-    navigate("/services");
   };
 
-  const handleRun = () => {
+   const handleRun = async () => {
     try {
-      const parsedParams = JSON.parse(formData.parameters);
-      console.log("Running service with:", { ...formData, params: parsedParams });
-      alert("Service executed! Check console for details.");
+      const parsedParams = JSON.parse(formData.parameters || "{}");
+      const result = await ServiceAPI.run(id, parsedParams);
+      setRunResult(JSON.stringify(result, null, 2));
     } catch (err) {
-      alert("Invalid JSON in parameters field");
+      setRunResult("Error: Invalid JSON or run failed");
     }
   };
 
   return (
     <div>
       <Navbar mode={mode} setMode={setMode} />
-      <Container maxWidth="xll" sx={{ mt: 4 }}>
+      <Container maxWidth="xl" sx={{ mt: 4 }}>
         <Paper sx={{ p: 3, borderRadius: 3, boxShadow: 3 }}>
           {/* Header row: title + buttons */}
           <Box
@@ -85,24 +91,17 @@ export default function ServiceForm({ mode, setMode }) {
             <Typography variant="h5" gutterBottom>
               {id === "new" ? "Create Service" : "Edit Service"}
             </Typography>
-          
+
             <Box sx={{ display: "flex", gap: 1 }}>
-              <Button
-                variant="outlined"
-                onClick={() => navigate("/services")}
-              >
+              <Button variant="outlined" onClick={() => navigate("/services")}>
                 Cancel
               </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSubmit}
-              >
+              <Button variant="contained" color="primary" onClick={handleSubmit}>
                 {id === "new" ? "Create" : "Update"}
               </Button>
             </Box>
           </Box>
-          
+
           {/* The rest of the form (LHS/RHS split) */}
           <Box sx={{ display: "flex", gap: 2 }}>
             {/* LHS */}
@@ -125,16 +124,36 @@ export default function ServiceForm({ mode, setMode }) {
                 multiline
                 minRows={6}
               />
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleRun}
-                sx={{ mt: 1 }}
-              >
-                Run
-              </Button>
+              {id !== "new" && (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleRun}
+                  sx={{ mt: 1 }}
+                >
+                  Run
+                </Button>
+              ) }
+
+              {id !== "new" && (
+                <TextField
+                  label="Run Result"
+                  value={runResult}
+                  fullWidth
+                  margin="normal"
+                  multiline
+                  minRows={6}
+                  slotProps={{
+                    input: {
+                      readOnly: true,
+                    },
+                  }}
+                />
+              ) }
+
+              
             </Box>
-          
+
             {/* RHS */}
             <Box sx={{ flex: 2 }}>
               <Editor
