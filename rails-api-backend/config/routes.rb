@@ -12,4 +12,9 @@ Rails.application.routes.draw do
   get  '/me',         to: 'users#me'
 
   resources :functions, only: [:index, :show, :create, :update, :destroy]
+  resources :services do
+    member do
+      post :run
+    end
+  end
 end

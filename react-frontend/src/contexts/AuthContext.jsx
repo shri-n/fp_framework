@@ -1,3 +1,30 @@
+// import React, { createContext, useState, useContext } from "react";
+
+// const AuthContext = createContext();
+
+// export const AuthProvider = ({ children }) => {
+//   const [user, setUser] = useState(null);
+
+//   const login = (username, password) => {
+//     // fake login
+//     setUser({ username });
+//   };
+
+//   const register = (username, password) => {
+//     // fake register
+//     setUser({ username });
+//   };
+
+//   const logout = () => setUser(null);
+
+//   return (
+//     <AuthContext.Provider value={{ user, login, register, logout }}>
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
+
+// export const useAuth = () => useContext(AuthContext);
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { authAPI } from '../services/api'
 

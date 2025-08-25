@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_24_220417) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_25_203454) do
   create_table "functions", force: :cascade do |t|
     t.string "name"
     t.text "code"
@@ -19,6 +19,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_24_220417) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_functions_on_user_id"
+  end
+
+  create_table "services", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.text "code"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "name"], name: "index_services_on_user_id_and_name", unique: true
+    t.index ["user_id"], name: "index_services_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -31,4 +42,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_24_220417) do
   end
 
   add_foreign_key "functions", "users"
+  add_foreign_key "services", "users"
 end

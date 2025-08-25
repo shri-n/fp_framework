@@ -1,6 +1,10 @@
 class ApplicationController < ActionController::API
   before_action :authenticate_user
 
+  def current_user
+    @current_user
+  end
+
   private
 
   def authenticate_user

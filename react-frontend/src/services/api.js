@@ -49,29 +49,35 @@ export const authAPI = {
   }),
 }
 
-export const functionAPI = {
+export const ServiceAPI = {
   // Fetch all functions
-  list: () => apiRequest('/functions'),
+  index: () => apiRequest('/services'),
 
   // Fetch a single function by ID
-  get: (id) => apiRequest(`/functions/${id}`),
+  show: (id) => apiRequest(`/services/${id}`),
 
   // Create a new function
-  create: (data) => apiRequest('/functions', {
+  create: (data) => apiRequest('/services', {
     method: 'POST',
-    body: JSON.stringify({ function: data }),
+    body: JSON.stringify({ services: data }),
   }),
 
   // Update an existing function
-  update: (id, data) => apiRequest(`/functions/${id}`, {
+  update: (id, data) => apiRequest(`/services/${id}`, {
     method: 'PUT',
     body: JSON.stringify({ function: data }),
   }),
 
   // Delete a function
-  delete: (id) => apiRequest(`/functions/${id}`, {
+  delete: (id) => apiRequest(`/services/${id}`, {
     method: 'DELETE',
   }),
+
+  run: (params) => apiRequest(`/services/${id}/run`, {
+    method: 'POST',
+    body: JSON.stringify({ params: params }),
+  }),
 }
+
 
 export const healthCheck = () => apiRequest('/health')
